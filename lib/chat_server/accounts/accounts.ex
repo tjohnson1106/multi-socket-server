@@ -4,9 +4,10 @@ defmodule ChatServer.Accounts do
   """
 
   import Ecto.Query, warn: false
+  import Comeonin.Argon2, only: [checkpw: 2, dummy_checkpw: 0]
   alias ChatServer.Repo
 
-  alias ChatServer.Accounts.User
+  alias ChatServer.Accounts.{User, Credential}
 
   @doc """
   Returns the list of users.
