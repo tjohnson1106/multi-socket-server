@@ -2,4 +2,7 @@
 
 @import "./phoenix.css";
 
-$bgcolor: #123456;
+$bgcolor: #0a1f35;
+body {
+  background-color: $bgcolor;
+}
