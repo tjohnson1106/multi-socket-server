@@ -36,7 +36,10 @@ defmodule ChatServer.Accounts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_user!(id) do
+    Repo.get!(User, id)
+    |> Repo.preload(:credential)
+  end
 
   @doc """
   Creates a user.
@@ -53,6 +56,10 @@ defmodule ChatServer.Accounts do
   def create_user(attrs \\ %{}) do
     %User{}
     |> User.changeset(attrs)
+    |> Ecto.Changeset.cast_assoc(
+      :credential,
+      with: &Credential.registration_changeset/2
+    )
     |> Repo.insert()
   end
 
@@ -69,8 +76,16 @@ defmodule ChatServer.Accounts do
 
   """
   def update_user(%User{} = user, attrs) do
+    cred_changeset =
+      if attrs["credential"]["password"] == "" do
+        &Credential.changeset/2
+      else
+        &Credential.registration_changeset/2
+      end
+
     user
     |> User.changeset(attrs)
+    |> Ecto.Changeset.cast_assoc(:credential, with: cred_changeset)
     |> Repo.update()
   end
 

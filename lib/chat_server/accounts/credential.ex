@@ -8,7 +8,7 @@ defmodule ChatServer.Accounts.Credential do
     field(:password_hash, :string)
     field(:password, :string, virtual: true)
     field(:password_confirmation, :string, virtual: true)
-    belongs_top(:user, ChatServer.Accounts.User)
+    belongs_to(:user, ChatServer.Accounts.User)
 
     timestamps()
   end
@@ -22,11 +22,11 @@ defmodule ChatServer.Accounts.Credential do
     |> unique_constraint(:email)
   end
 
-  def registration_changeset(struct, attrs = %{}) do
+  def registration_changeset(struct, attrs \\ %{}) do
     struct
     |> changeset(attrs)
     |> cast(attrs, [:password, :password_confirmation])
-    |> validate_required(attrs, [:password, :password_confirmation])
+    |> validate_required([:password, :password_confirmation])
     |> validate_length(:password, min: 8)
     |> validate_confirmation(:password)
     |> hash_password()
