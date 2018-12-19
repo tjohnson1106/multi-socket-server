@@ -120,6 +120,17 @@ defmodule ChatServer.Accounts do
 
   alias ChatServer.Accounts.Credential
 
+  def authenticate_by_email_and_password(email, password) do
+    cred =
+      Repo.get_by(Credential, email: email)
+      |> Repo.preload(:user)
+
+    cond do
+      cred && checkpw(given_pass, cred.password_hash) ->
+        {:ok, cred.user}
+    end
+  end
+
   @doc """
   Returns the list of credentials.
 
