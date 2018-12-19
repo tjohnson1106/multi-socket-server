@@ -120,7 +120,7 @@ defmodule ChatServer.Accounts do
 
   alias ChatServer.Accounts.Credential
 
-  def authenticate_by_email_password(email, password) do
+  def authenticate_by_email_password(email, given_pass) do
     cred =
       Repo.get_by(Credential, email: email)
       |> Repo.preload(:user)

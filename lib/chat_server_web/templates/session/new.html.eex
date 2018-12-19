@@ -7,7 +7,7 @@
   </div>
 
   <div>
-    <%= password_input f, :password, placeholder: "Placeholder", class: "form-control" %>
+    <%= password_input f, :password, placeholder: "Password", class: "form-control" %>
   </div>
   
   <div>

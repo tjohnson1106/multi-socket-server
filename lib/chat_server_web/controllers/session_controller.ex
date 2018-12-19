@@ -7,13 +7,6 @@ defmodule ChatServerWeb.SessionController do
     render(conn, "new.html")
   end
 
-  def delete(conn, _) do
-    conn
-    |> configure_session(drop: true)
-    |> put_flash(:success, "Successfully signed out")
-    |> redirect(to: "/")
-  end
-
   # valid user, not found, or unauthorized are the valid results
 
   def create(conn, %{"user" => %{"email" => email, "password" => password}}) do
@@ -35,5 +28,12 @@ defmodule ChatServerWeb.SessionController do
         |> put_flash(:error, "Account not found")
         |> redirect(to: Routes.session_path(conn, :new))
     end
+  end
+
+  def delete(conn, _) do
+    conn
+    |> configure_session(drop: true)
+    |> put_flash(:success, "Successfully signed out")
+    |> redirect(to: "/")
   end
 end
