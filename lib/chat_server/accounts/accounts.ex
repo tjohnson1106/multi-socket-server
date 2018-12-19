@@ -120,14 +120,22 @@ defmodule ChatServer.Accounts do
 
   alias ChatServer.Accounts.Credential
 
-  def authenticate_by_email_and_password(email, password) do
+  def authenticate_by_email_password(email, password) do
     cred =
       Repo.get_by(Credential, email: email)
       |> Repo.preload(:user)
 
+    # if else
     cond do
       cred && checkpw(given_pass, cred.password_hash) ->
         {:ok, cred.user}
+
+      cred ->
+        {:error, :unauthorized}
+
+      true ->
+        dummy_checkpw()
+        {:error, :not_found}
     end
   end
 
