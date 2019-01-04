@@ -3,6 +3,10 @@ defmodule ChatServerWeb.UserController do
 
   alias ChatServer.Accounts
   alias ChatServer.Accounts.User
+  import ChatServer.Auth, only: [logged_in_user: 2, admin_user: 2]
+  plug :logged_in_user when action not in [:new, :create]
+  plug :correct_user when action in [:edit, :update, :create]
+  plug :admin_user, [pokerface: true] when action in [:index, :delete]
 
   def index(conn, _params) do
     users = Accounts.list_users()
@@ -58,5 +62,25 @@ defmodule ChatServerWeb.UserController do
     conn
     |> put_flash(:info, "User deleted successfully.")
     |> redirect(to: Routes.user_path(conn, :index))
+  end
+
+  defp correct_user(
+         %{
+           assigns: %{
+             current_user: current,
+             admin_user: admin
+           },
+           params: %{"id" => id}
+         } = conn,
+         _params
+       ) do
+    if String.to_integer(id) == current.id || admin do
+      conn
+    else
+      conn
+      |> put_flash(:error, "You don't have access to that page")
+      |> redirect(to: user_path(conn, :show, current))
+      |> halt()
+    end
   end
 end
