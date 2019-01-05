@@ -3,6 +3,7 @@ defmodule ChatServerWeb.RoomController do
 
   alias ChatServer.Chat
   alias ChatServer.Chat.Room
+  plug :admin_user when action in [:delete, :edit]
 
   def index(conn, _params) do
     rooms = Chat.list_rooms()

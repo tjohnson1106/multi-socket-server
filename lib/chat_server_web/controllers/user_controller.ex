@@ -3,7 +3,7 @@ defmodule ChatServerWeb.UserController do
 
   alias ChatServer.Accounts
   alias ChatServer.Accounts.User
-  import ChatServer.Auth, only: [logged_in_user: 2, admin_user: 2]
+
   plug :logged_in_user when action not in [:new, :create]
   plug :correct_user when action in [:edit, :update, :create]
   plug :admin_user, [pokerface: true] when action in [:index, :delete]

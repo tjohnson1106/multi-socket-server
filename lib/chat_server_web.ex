@@ -23,6 +23,7 @@ defmodule ChatServerWeb do
 
       import Plug.Conn
       import ChatServerWeb.Gettext
+      import ChatServer.Auth, only: [logged_in_user: 2, admin_user: 2]
       alias ChatServerWeb.Router.Helpers, as: Routes
     end
   end
