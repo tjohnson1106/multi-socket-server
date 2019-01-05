@@ -79,7 +79,7 @@ defmodule ChatServerWeb.UserController do
     else
       conn
       |> put_flash(:error, "You don't have access to that page")
-      |> redirect(to: user_path(conn, :show, current))
+      |> redirect(to: Routes.user_path(conn, :show, current))
       |> halt()
     end
   end
